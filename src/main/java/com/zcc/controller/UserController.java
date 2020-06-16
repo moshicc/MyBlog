@@ -4,9 +4,9 @@ package com.zcc.controller;
 import com.zcc.common.lang.Result;
 import com.zcc.entity.User;
 import com.zcc.service.UserService;
-import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,12 +31,10 @@ public class UserController {
         return Result.succ(user);
     }
 
-    @PostMapping("/insert/{username}")
-    public void insert(@PathVariable("username") String username){
-        User user = new User();
-        user.setUsername(username);
-        user.setStatus(1);
-        userService.save(user);
+    @PostMapping("/insert")
+    public Result insert(@Validated @RequestBody User user){
+//        userService.save(user);
+        return Result.succ(user);
     }
 
 }
