@@ -1,0 +1,43 @@
+package com.zcc.common.exception;
+
+import com.zcc.common.lang.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+/**
+ * @author zcc
+ * @date 2020/6/16 21:02
+ * @description 全局异常捕获类
+ */
+
+@Slf4j
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    //捕获Shiro的异常,UNAUTHORIZED 401  没有权限
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = ShiroException.class)
+    public Result handler(ShiroException e){
+        log.error("shiro异常：-----------------{}",e.getMessage());
+        Result errMsg = Result.fail(401,e.getMessage(),null);
+        return errMsg;
+    }
+
+    //所有的RunntimeException 都会被捕获 ，交给handler处理，返回一个异常信息封装了Result，
+    // （如：XXXController出现异常时，就会返回一个Result给前台，这和Result正好是我们统一返回的格式）
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = RuntimeException.class)
+    public Result handler(RuntimeException e){
+        log.error("运行时异常：-----------------{}",e.getMessage());
+        Result errMsg = Result.fail(e.getMessage());
+        return errMsg;
+    }
+
+
+}
