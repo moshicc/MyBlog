@@ -24,7 +24,7 @@ public class UserController {
     UserService userService;
 
 //RequiresAuthentication 注解，需要进行登录，才能访问/index
-    @RequiresAuthentication
+   // @RequiresAuthentication
     @GetMapping("/index")
     public Result index(){
         User user = userService.getById(1L);
@@ -33,7 +33,7 @@ public class UserController {
 
     @PostMapping("/insert")
     public Result insert(@Validated @RequestBody User user){
-//        userService.save(user);
+       userService.save(user);
         return Result.succ(user);
     }
 
